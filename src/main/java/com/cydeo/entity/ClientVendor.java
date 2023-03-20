@@ -17,6 +17,7 @@ public class ClientVendor extends BaseEntity{
       private String clientVendorName;
     private String phone;
     private String website;
+    @Enumerated(EnumType.STRING)
     private ClientVendorType clientVendorType;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="address_id")

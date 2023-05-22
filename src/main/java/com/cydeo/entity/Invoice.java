@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Table(name = "invoices")

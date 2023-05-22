@@ -2,6 +2,7 @@ package com.cydeo.entity.common;
 
 import com.cydeo.entity.User;
 import com.cydeo.enums.CompanyStatus;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,9 +13,9 @@ import java.util.List;
 
 public class UserPrincipal implements UserDetails {
 
-    private User user;
+    private final User user;
 
-    public UserPrincipal(User user) {
+    public UserPrincipal(@Lazy User user) {
         this.user = user;
     }
 
@@ -45,7 +46,8 @@ public class UserPrincipal implements UserDetails {
     public boolean isAccountNonLocked() {
         return !user.getCompany().getCompanyStatus().equals(CompanyStatus.PASSIVE);
     }
-//make it true, we dont have sucha filed in datbase
+
+    //make it true, we dont have sucha filed in datbase
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
@@ -54,5 +56,25 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return user.isEnabled();
+    }
+
+    public Long getId() {
+        return this.user.getId();
+    }
+
+    /**
+     * to show logged-in user firstname and lastname in UI dropdown menu
+     */
+    public String getFullNameForProfile() {
+        return this.user.getFirstname() + " " + this.user.getLastname();
+    }
+
+    /**
+     * This method is defined to show logged-in user's company title for simplicity
+     *
+     * @return The title of logged-in user's Company in String
+     */
+    public String getCompanyTitleForProfile() {
+        return this.user.getCompany().getTitle().toUpperCase();
     }
 }

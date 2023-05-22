@@ -7,9 +7,10 @@ public enum ClientVendorType {
     private final String value;
 
     ClientVendorType(String value) {
-        this.value=value;
+        this.value = value;
     }
-    public String getValue(){
+
+    public String getValue() {
         return value;
     }
 }

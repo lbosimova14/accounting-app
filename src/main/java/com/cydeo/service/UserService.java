@@ -5,6 +5,7 @@ import com.cydeo.dto.UserDto;
 public interface UserService {
 
     UserDto findByUsername(String username);
+
     UserDto findUserById(Long id);
 
 }

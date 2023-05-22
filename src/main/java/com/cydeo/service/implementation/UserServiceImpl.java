@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new EntityNotFoundException("The user is not found for " + userId);
         }
-        UserDto dto = mapperUtil.convertToType(user, new UserDto());
+        UserDto dto = mapperUtil.convert(user, new UserDto());
         return dto;
     }
 
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new EntityNotFoundException("The user is not found for " + username);
         }
-        return mapperUtil.convertToType(user, new UserDto());
+        return mapperUtil.convert(user, new UserDto());
     }
 
 }

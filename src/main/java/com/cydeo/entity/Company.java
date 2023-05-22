@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "companies")
-public class Company  extends BaseEntity{
+public class Company extends BaseEntity {
 
     @Column(unique = true)
     private String title;

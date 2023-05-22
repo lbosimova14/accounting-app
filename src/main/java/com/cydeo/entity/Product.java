@@ -9,13 +9,11 @@ import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
 @Table(name = "products")
-public class Product extends BaseEntity{
+public class Product extends BaseEntity {
 
-         private String name;
-
+    private String name;
     private int quantityInStock;
     private int lowLimitAlert;
     @Enumerated(EnumType.STRING)

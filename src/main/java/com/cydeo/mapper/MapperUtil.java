@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Type;
+
 @Component
 public class MapperUtil {
 
@@ -13,7 +14,7 @@ public class MapperUtil {
         this.modelMapper = modelMapper;
     }
 
-    public <T> T convert(Object objectToBeConverted, T convertedObject){
+    public <T> T convert(Object objectToBeConverted, T convertedObject) {
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         return modelMapper.map(objectToBeConverted, (Type) convertedObject.getClass());
     }

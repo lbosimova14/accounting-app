@@ -14,7 +14,7 @@ import java.util.List;
 public class UserPrincipal implements UserDetails {
 
     private final User user;
-
+//@Lazy lazy loading, create object when we need it
     public UserPrincipal(@Lazy User user) {
         this.user = user;
     }
@@ -47,7 +47,7 @@ public class UserPrincipal implements UserDetails {
         return !user.getCompany().getCompanyStatus().equals(CompanyStatus.PASSIVE);
     }
 
-    //make it true, we dont have sucha filed in datbase
+    //make it true, we dont have sucha filed in database
     @Override
     public boolean isCredentialsNonExpired() {
         return true;

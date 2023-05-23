@@ -1,24 +1,37 @@
 package com.cydeo.service.implementation;
 
+import com.cydeo.dto.CompanyDto;
 import com.cydeo.dto.UserDto;
 import com.cydeo.entity.User;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.UserRepository;
+import com.cydeo.service.SecurityService;
 import com.cydeo.service.UserService;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final SecurityService securityService;
     private final MapperUtil mapperUtil;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, MapperUtil mapperUtil) {
+    public UserServiceImpl(UserRepository userRepository, @Lazy SecurityService securityService, MapperUtil mapperUtil, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.securityService = securityService;
         this.mapperUtil = mapperUtil;
+        this.passwordEncoder = passwordEncoder;
     }
+
+
 
     @Override
     public UserDto findUserById(Long userId) {
@@ -30,6 +43,13 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
+//    @Override
+//    public List<UserDto> findAllUsers() {
+//      List<User> users =  userRepository.findAll();
+//        return users.stream().map(u -> mapperUtil.convert(u ,new UserDto())).collect(Collectors.toList());
+//
+//    }
+
     @Override
     public UserDto findByUsername(String username) {
         User user = userRepository.findByUsername(username);
@@ -38,5 +58,41 @@ public class UserServiceImpl implements UserService {
         }
         return mapperUtil.convert(user, new UserDto());
     }
+
+    @Override
+    public List<UserDto> getFilteredUsers() {
+        List<User> userList;
+        if (isCurrentUserRootUser()) {
+            userList = userRepository.findAllByRoleDescription("Admin");
+        } else {
+            userList = userRepository.findAllByCompanyTitle(getCurrentUserCompanyTitle());
+        }
+        return userList.stream()
+                .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle()).thenComparing(u -> u.getRole().getDescription()))
+                .map(entity -> {
+                    UserDto dto = mapperUtil.convert(entity, new UserDto());
+                    dto.setIsOnlyAdmin(checkIfOnlyAdminForCompany(dto));
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private Boolean isCurrentUserRootUser() {
+        return securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("root user");
+    }
+
+    private String getCurrentUserCompanyTitle() {
+        String currentUserName = securityService.getLoggedInUser().getUsername();
+        return userRepository.findByUsername(currentUserName).getCompany().getTitle();
+    }
+
+    private Boolean checkIfOnlyAdminForCompany(UserDto dto) {
+        if (dto.getRole().getDescription().equalsIgnoreCase("Admin")) {
+            List<User> users = userRepository.findAllByCompanyTitleAndRoleDescription(dto.getCompany().getTitle(), "Admin");
+            return users.size() == 1;
+        }
+        return false;
+    }
+
 
 }

@@ -1,10 +1,9 @@
 package com.cydeo.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -14,9 +13,11 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @MappedSuperclass
-public class BaseEntity {
+@EntityListeners(BaseEntityListener.class)
+public class BaseEntity implements Serializable {
 
     //define primary key, use @Id annotation
     @Id

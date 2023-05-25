@@ -10,6 +10,7 @@ import java.util.List;
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     Company findCompanyById(Long id);
+    boolean existsByTitle(String title);
 
 
 

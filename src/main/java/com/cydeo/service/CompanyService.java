@@ -11,4 +11,8 @@ public interface CompanyService {
     List<CompanyDto> listAllCompany();
 
 
+   CompanyDto save(CompanyDto companyDto);
+
+    void update(CompanyDto companyDto);
+    boolean isTitleExist(String title);
 }

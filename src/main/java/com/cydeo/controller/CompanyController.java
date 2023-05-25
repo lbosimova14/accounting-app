@@ -62,5 +62,18 @@ public class CompanyController {
         return "redirect:/companies/list"; ///companies/list is end point, not html file
     }
 
+    @GetMapping("/activate/{companyId}")
+    public  String setToActivate(@PathVariable("companyId") Long companyId){
+        companyService.activate(companyId);
+        return "redirect:/companies/list";
+    }
+
+    @GetMapping("/deactivate/{companyId}")
+    public  String setToDeactivate(@PathVariable("companyId") Long companyId){
+        companyService.deactivate(companyId);
+        return "redirect:/companies/list";
+    }
+
+
 
 }

@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -33,9 +34,13 @@ public class CompanyController {
     }
 
     @PostMapping("/create")
-    public String insertCompany(@ModelAttribute("newCompany") CompanyDto companyDto,  Model model){
-        model.addAttribute("newCompany", new CompanyDto());
+    public String insertCompany(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult, Model model){
 
+//if any broken data coming , then somehow stop the post method
+        if (bindingResult.hasErrors()) {
+            //stays in the same page
+            return "company/company-create";
+        }
         companyService.save(companyDto);
         return "redirect:/companies/list";
     }

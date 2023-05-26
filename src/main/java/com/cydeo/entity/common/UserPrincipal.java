@@ -47,7 +47,7 @@ public class UserPrincipal implements UserDetails {
         return !user.getCompany().getCompanyStatus().equals(CompanyStatus.PASSIVE);
     }
 
-    //make it true, we dont have sucha filed in database
+    //make it true, we dont have such field in database
     @Override
     public boolean isCredentialsNonExpired() {
         return true;

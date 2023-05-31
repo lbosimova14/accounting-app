@@ -19,4 +19,8 @@ public interface CompanyService {
     void activate(Long byId);
 
     void deactivate(Long companyId);
+
+    List<CompanyDto> getFilteredCompaniesForCurrentUser();
+
+    CompanyDto getCompanyByLoggedInUser();
 }

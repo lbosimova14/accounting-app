@@ -7,6 +7,7 @@ import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.AddressRepository;
 import com.cydeo.repository.CompanyRepository;
 import com.cydeo.service.CompanyService;
+import com.cydeo.service.SecurityService;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -21,9 +22,13 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final MapperUtil mapperUtil;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, MapperUtil mapperUtil) {
+    private final SecurityService securityService;
+
+
+    public CompanyServiceImpl(CompanyRepository companyRepository, MapperUtil mapperUtil, SecurityService securityService) {
         this.companyRepository = companyRepository;
         this.mapperUtil = mapperUtil;
+        this.securityService = securityService;
     }
 
     @Override
@@ -79,6 +84,24 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyRepository.findCompanyById(companyId);
         company.setCompanyStatus(CompanyStatus.PASSIVE);
         companyRepository.save(company);
+    }
+
+    @Override
+    public List<CompanyDto> getFilteredCompaniesForCurrentUser() {
+        return listAllCompany().stream()
+                .filter(each -> {
+                    if (securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("root user")) {
+                        return true;
+                    } else {
+                        return each.getTitle().equals(getCompanyByLoggedInUser().getTitle());
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public CompanyDto getCompanyByLoggedInUser() {
+        return securityService.getLoggedInUser().getCompany();
     }
 
 

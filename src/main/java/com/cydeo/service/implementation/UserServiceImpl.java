@@ -2,7 +2,9 @@ package com.cydeo.service.implementation;
 
 import com.cydeo.dto.CompanyDto;
 import com.cydeo.dto.UserDto;
+import com.cydeo.entity.Company;
 import com.cydeo.entity.User;
+import com.cydeo.enums.CompanyStatus;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.UserRepository;
 import com.cydeo.service.SecurityService;
@@ -43,13 +45,6 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
-//    @Override
-//    public List<UserDto> findAllUsers() {
-//      List<User> users =  userRepository.findAll();
-//        return users.stream().map(u -> mapperUtil.convert(u ,new UserDto())).collect(Collectors.toList());
-//
-//    }
-
     @Override
     public UserDto findByUsername(String username) {
         User user = userRepository.findByUsername(username);
@@ -76,6 +71,26 @@ public class UserServiceImpl implements UserService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public UserDto update(UserDto userDto) {
+
+       User currentUser= userRepository.findByUsername(userDto.getUsername());
+     User convertedUser=  mapperUtil.convert(userDto, new User());
+     convertedUser.setId(currentUser.getId());
+     userRepository.save(convertedUser);
+
+        return findByUsername(userDto.getUsername());
+    }
+
+    @Override
+    public void save(UserDto userDto) {
+        User user = userRepository.save(mapperUtil.convert(userDto, new User()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
+
 
     private Boolean isCurrentUserRootUser() {
         return securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("root user");

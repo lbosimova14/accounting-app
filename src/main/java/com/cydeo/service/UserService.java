@@ -13,4 +13,10 @@ public interface UserService {
 //    List<UserDto> findAllUsers();
 //The provider company "CYDEO" (ID=1) should not be listed on the table
     List<UserDto> getFilteredUsers();
+
+//    UserDto save(UserDto userDto);
+
+    UserDto update(UserDto userDto);
+
+    void save(UserDto userDto);
 }

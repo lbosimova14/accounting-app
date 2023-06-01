@@ -47,7 +47,6 @@ public class UserController {
     @PostMapping("/create")
     public String createUser(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult bindingResult,Model model ){
         if (bindingResult.hasErrors()) {
-//            model.addAttribute("newUser", new UserDto());
             model.addAttribute("userRoles",  roleService.getFilteredRolesForCurrentUser());
             model.addAttribute("companies",companyService.getFilteredCompaniesForCurrentUser());
             return "/user/user-create";
@@ -59,22 +58,44 @@ public class UserController {
     @GetMapping("/update/{userId}")
     public String editUser(@PathVariable("userId") Long userId, Model model){
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("userRoles", roleService.listAllRoles());
-        model.addAttribute("companies", companyService.listAllCompany());
+        model.addAttribute("userRoles",  roleService.getFilteredRolesForCurrentUser());
+        model.addAttribute("companies",companyService.getFilteredCompaniesForCurrentUser());
         return "/user/user-update";
     }
 
     @PostMapping("/update/{userId}")
-        public String updateUser(@Valid @ModelAttribute("userId") UserDto userDto, BindingResult bindingResult, Model model){
+        public String updateUser(@PathVariable("userId") Long userId,@Valid @ModelAttribute("user") UserDto userDto, BindingResult bindingResult, Model model){
 
-        if(bindingResult.hasErrors()){
+        userDto.setId(userId);  // spring cannot set id since it is not seen in UI and we need to check if updated email is used by different user.
+        boolean emailExist = userService.emailExist(userDto);
+
+        if (bindingResult.hasErrors() || emailExist){
+            if (emailExist) {
+                bindingResult.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
+            }
+
+            model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
+            model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
             return "/user/user-update";
         }
+//        if(bindingResult.hasErrors()){
+//            //if Validation throws exception, bring up the Role and Company again
+//            model.addAttribute("userRoles",  roleService.getFilteredRolesForCurrentUser());
+//            model.addAttribute("companies",companyService.getFilteredCompaniesForCurrentUser());
+//            //There is bug, if something wrong, it is not returning to user-update html page, showing 'Whitelabel Error Page'
+//            return "/user/user-update";
+//        }
 
         userService.update(userDto);
         return "redirect:/users/list";
     }
 
+
+    @GetMapping("/delete/{userId}")
+    public String deleteUser(@PathVariable("userId") Long userID){
+        userService.delete(userID);
+        return "redirect:/users/list";
+    }
 
 
 

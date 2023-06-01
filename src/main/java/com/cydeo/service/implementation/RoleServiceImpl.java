@@ -32,13 +32,14 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleDto findRoleById(Long id) {
+        //convert the entity/db to dto/view
         return mapperUtil.convert(roleRepository.findRoleById(id), new RoleDto());
     }
 
     @Override
     public List<RoleDto> listAllRoles() {
 
-        return roleRepository.findAll().stream().map((element) -> modelMapper.map(element, RoleDto.class)).collect(Collectors.toList());
+        return roleRepository.findAll().stream().map(element -> modelMapper.map(element, RoleDto.class)).collect(Collectors.toList());
     }
 
     @Override

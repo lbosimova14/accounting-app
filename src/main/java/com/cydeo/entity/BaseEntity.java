@@ -21,16 +21,18 @@ public class BaseEntity implements Serializable {
 
     //define primary key, use @Id annotation
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //postgress will generate id/primary key
     private Long id;
+    //nullable = false, means keep the same value, when you update some data, the insertDateTime becoming overwrite and null
     @Column(nullable = false, updatable = false)
     public LocalDateTime insertDateTime;
     @Column(nullable = false, updatable = false)
-    public Long insertUserId;
+    public Long insertUserId; //who inserted data
+//    dont put  updatable = false in lastUpdateDateTime, bc we need to see the updated changes
     @Column(nullable = false)
     public LocalDateTime lastUpdateDateTime;
     @Column(nullable = false)
     public Long lastUpdateUserId;
-
+    //dont delete data in database, change the flag to true only, it only deleted in ui, but data is kept in database
     private Boolean isDeleted = false;
 }

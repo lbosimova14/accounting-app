@@ -1,10 +1,7 @@
 package com.cydeo.service.implementation;
 
-import com.cydeo.dto.CompanyDto;
 import com.cydeo.dto.UserDto;
-import com.cydeo.entity.Company;
 import com.cydeo.entity.User;
-import com.cydeo.enums.CompanyStatus;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.UserRepository;
 import com.cydeo.service.SecurityService;
@@ -47,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findByUsername(String username) {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username); //Select username FROM USERS where is_deleted=false
         if (user == null) {
             throw new EntityNotFoundException("The user is not found for " + username);
         }
@@ -64,6 +61,7 @@ public class UserServiceImpl implements UserService {
         }
         return userList.stream()
                 .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle()).thenComparing(u -> u.getRole().getDescription()))
+                //.map means iterate each object
                 .map(entity -> {
                     UserDto dto = mapperUtil.convert(entity, new UserDto());
                     dto.setIsOnlyAdmin(checkIfOnlyAdminForCompany(dto));
@@ -74,21 +72,48 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UserDto userDto) {
-
+        //save method is equal to update, there are not update method in crud
+        //find current user
        User currentUser= userRepository.findByUsername(userDto.getUsername());
-     User convertedUser=  mapperUtil.convert(userDto, new User());
-     convertedUser.setId(currentUser.getId());
-     userRepository.save(convertedUser);
+     User updatedUser=  mapperUtil.convert(userDto, new User());
+     //capture the existing user ID then set back the same id, if you dont retrieve from database, ui does not have id, then it will create new id, which we dont want
+        updatedUser.setId(currentUser.getId());
+        updatedUser.setPassword(passwordEncoder.encode(currentUser.getPassword()));
+     userRepository.save(updatedUser);
 
         return findByUsername(userDto.getUsername());
     }
 
     @Override
     public void save(UserDto userDto) {
+//        get the new Dto user from view and convert to Entity then save it to databse
         User user = userRepository.save(mapperUtil.convert(userDto, new User()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(true);
         userRepository.save(user);
+    }
+
+    @Override
+    public void delete(Long userID) {
+        User user = userRepository.findUserById(userID);
+        //dont delete data in database, change the flag to true only, it only deleted in ui, but data is kept in database
+        user.setIsDeleted(true);
+        user.setUsername(user.getUsername() + "-" + user.getId());
+        userRepository.save(user);
+
+
+    }
+
+    @Override
+    public void deleteByUserId(Long userID) {
+        userRepository.deleteById(findUserById(userID).getId()); //getId() is returning as a optional
+    }
+
+    @Override
+    public Boolean emailExist(UserDto userDto) {
+        User userWithUpdatedEmail = userRepository.findByUsername(userDto.getUsername());
+        if (userWithUpdatedEmail == null) return false;
+        return !userWithUpdatedEmail.getId().equals(userDto.getId());
     }
 
 

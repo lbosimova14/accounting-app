@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Component
 public class BaseEntityListener extends AuditingEntityListener {
 
+    //Persist means save, it runs automatically and saves new record in database. The method can be anything, important only @PrePersist annotation
     @PrePersist
     public void onPrePersist(BaseEntity baseEntity) {
 

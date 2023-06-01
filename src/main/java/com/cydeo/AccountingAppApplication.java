@@ -8,13 +8,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 //@EnableCaching
+
+/**
+ * If class is not your class, and create bean in this class, bc @SpringBootApplication has @Configuration, it is treating as configuration class
+ */
 @SpringBootApplication
 public class AccountingAppApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(AccountingAppApplication.class, args);
     }
-
+    //convert the entity/db to dto/view
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();

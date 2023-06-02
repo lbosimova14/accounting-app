@@ -10,6 +10,8 @@ public class DashboardController {
 
     @RequestMapping("/dashboard")
     public String get() {
+
+
         return "dashboard";
     }
 

@@ -1,7 +1,10 @@
 package com.cydeo.service.implementation;
 
 import com.cydeo.dto.ClientVendorDto;
+import com.cydeo.dto.CompanyDto;
 import com.cydeo.entity.ClientVendor;
+import com.cydeo.entity.Company;
+import com.cydeo.enums.CompanyStatus;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.ClientVendorRepository;
 import com.cydeo.service.ClientVendorService;
@@ -31,10 +34,27 @@ public class ClientVendorImpl implements ClientVendorService {
 
     @Override
     public List<ClientVendorDto> listAllClientsAndVendors() {
-//        element -> mapperUtil.convert(element, ClientVendorDto.class)
         List<ClientVendor> clientVendors = clientVendorRepository.findAll();
         return  clientVendors.stream().map( obj -> mapperUtil.convert(obj , new ClientVendorDto())).collect(Collectors.toList());
-//         clientVendorRepository.findAll();
-//        return convertedClientVendor;
+
+    }
+
+    @Override
+    public List<ClientVendorDto> findClientVendorTypes() {
+
+
+        List<String> clientVendorList = clientVendorRepository.fetchAllClientVendorType();
+        return clientVendorList.stream().map(obj -> mapperUtil.convert(obj, new ClientVendorDto())).collect(Collectors.toList());
+//
+//      List<ClientVendor> clientVendorList = clientVendorRepository.findAllClientVendorByClientVendorType();
+//      return clientVendorList.stream().map(obj -> mapperUtil.convert(obj, new ClientVendorDto())).collect(Collectors.toList());
+//return  null;
+    }
+
+    @Override
+    public ClientVendorDto save(ClientVendorDto clientVendorDto) {
+//        companyDto.setCompanyStatus(CompanyStatus.PASSIVE);
+        ClientVendor clientVendor = clientVendorRepository.save(mapperUtil.convert(clientVendorDto, new ClientVendor()));
+        return mapperUtil.convert(clientVendor, new ClientVendorDto());
     }
 }

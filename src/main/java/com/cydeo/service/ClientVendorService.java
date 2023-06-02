@@ -8,4 +8,8 @@ public interface ClientVendorService {
     ClientVendorDto findClientVendorById(Long id);
 
     List<ClientVendorDto> listAllClientsAndVendors();
+
+    List<ClientVendorDto> findClientVendorTypes();
+
+    ClientVendorDto save(ClientVendorDto clientVendorDto);
 }

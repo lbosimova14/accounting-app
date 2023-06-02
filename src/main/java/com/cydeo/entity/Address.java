@@ -1,17 +1,16 @@
 package com.cydeo.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
-@Data
+@AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "addresses")
 
 public class Address extends BaseEntity {

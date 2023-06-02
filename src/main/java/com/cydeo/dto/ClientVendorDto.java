@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 @AllArgsConstructor
 public class ClientVendorDto {
 
-       private Long id;
+    private Long id;
     private String clientVendorName;
     private String phone;
     private String website;

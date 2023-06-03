@@ -78,13 +78,6 @@ public class UserController {
             model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
             return "/user/user-update";
         }
-//        if(bindingResult.hasErrors()){
-//            //if Validation throws exception, bring up the Role and Company again
-//            model.addAttribute("userRoles",  roleService.getFilteredRolesForCurrentUser());
-//            model.addAttribute("companies",companyService.getFilteredCompaniesForCurrentUser());
-//            //There is bug, if something wrong, it is not returning to user-update html page, showing 'Whitelabel Error Page'
-//            return "/user/user-update";
-//        }
 
         userService.update(userDto);
         return "redirect:/users/list";

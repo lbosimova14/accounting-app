@@ -49,13 +49,37 @@ public class ClientVendorController {
         }
 
     @GetMapping("/update/{clientVendorId}")
-    public String editClientVendor(@PathVariable("clientVendorId") Long clientVendorId, Model model){
+    public String insertClientVendor(@PathVariable("clientVendorId") Long clientVendorId, Model model){
 
         model.addAttribute("clientVendor", clientVendorService.findClientVendorById(clientVendorId));
         model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
         model.addAttribute("countries",addressService.getCountryList());
         return "/clientVendor/clientVendor-update";
     }
+
+
+    //If you dont want to use @PathVariable in @PostMapping, in method argument, then make sure {id} is match to DTO id field,
+//    otherwise id always will be null
+    @PostMapping("/update/{id}")
+    public String updateClientVendor(@ModelAttribute("clientVendor") ClientVendorDto clientVendorDto, BindingResult result, Model model){
+
+        if(result.hasErrors()){
+            model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
+            model.addAttribute("countries",addressService.getCountryList());
+            return "/clientVendor/clientVendor-update";
+        }
+
+         clientVendorService.update(clientVendorDto);
+      return "redirect:/clientVendors/list";
+    }
+
+    @GetMapping("/delete/{clientVendorId}")
+    public String deleteClientVendor(@PathVariable("clientVendorId") Long clientVendorID){
+        clientVendorService.delete(clientVendorID);
+        //make sure add '@Where(clause = "is_deleted=false")' ClientVendor Entity, then deleted item disappears from ui, otherwise, listAllClientsAndVendors() method retrieves all isDeleted=false and true
+        return "redirect:/clientVendors/list";
+    }
+
 
 
 

@@ -12,4 +12,8 @@ public interface ClientVendorService {
     List<ClientVendorDto> findClientVendorTypes();
 
     ClientVendorDto save(ClientVendorDto clientVendorDto);
+
+    void update(ClientVendorDto Id);
+
+    void delete(Long clientVendorID);
 }

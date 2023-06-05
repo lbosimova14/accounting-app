@@ -50,7 +50,7 @@ public class CompanyController {
         model.addAttribute("company", companyService.findCompanyById(companyId));
         return "/company/company-update";
     }
-//// id is get read from here private Long id; in CompanyDTO class, path parameter and id field is the same
+// id is get read from here private Long id; in CompanyDTO class, path parameter and id field is the same
     @PostMapping("/update/{id}")
     public String updateCompany(@ModelAttribute("company") CompanyDto companyDto, BindingResult bindingResult){
         boolean isThisCompanyTitle = companyDto.getTitle().equals(companyService.findCompanyById(companyDto.getId()).getTitle());

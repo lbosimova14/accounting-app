@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(UserDto userDto) {
-//        get the new Dto user from view and convert to Entity then save it to databse
+//        get the new Dto user from view and convert to Entity then save it to database
         User user = userRepository.save(mapperUtil.convert(userDto, new User()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(true);

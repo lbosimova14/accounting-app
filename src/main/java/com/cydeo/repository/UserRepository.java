@@ -9,14 +9,16 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-      //Derived Queries
+    //Derived Queries
     User findUserById(Long id);
+
     @Transactional
     User findByUsername(String username);
 
     List<User> findAllByRoleDescription(String roleDescription);
 
     List<User> findAllByCompanyTitle(String companyTitle);
+
     List<User> findAllByCompanyTitleAndRoleDescription(String companyTitle, String role);
 
 

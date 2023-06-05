@@ -36,15 +36,15 @@ public class AddressServiceImpl implements AddressService {
     @Value("${address.api.api-token}")
     private String userToken;
 
-    @Override
-    public AddressDto findAddressById(Long id) {
-        return mapperUtil.convert(addressRepository.findAddressById(id), new AddressDto());
-    }
-
     public AddressServiceImpl(AddressRepository addressRepository, MapperUtil mapperUtil, AddressFeignClient addressFeignClient) {
         this.addressRepository = addressRepository;
         this.mapperUtil = mapperUtil;
         this.addressFeignClient = addressFeignClient;
+    }
+
+    @Override
+    public AddressDto findAddressById(Long id) {
+        return mapperUtil.convert(addressRepository.findAddressById(id), new AddressDto());
     }
 
     @Override
@@ -72,7 +72,6 @@ public class AddressServiceImpl implements AddressService {
                 .collect(Collectors.toList());
 
     }
-
 
 
 }

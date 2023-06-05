@@ -11,8 +11,9 @@ import java.util.List;
 public interface AddressRepository extends JpaRepository<Address, Long> {
 
     Address findAddressById(Long id);
+
     @Query(value = "Select  a.country FROM Address a")
-    List<Address> fetchAllCountries ();
+    List<Address> fetchAllCountries();
 //    List<Address> findAllAddressByCountry();
 
 

@@ -1,16 +1,13 @@
 package com.cydeo.service.implementation;
 
 import com.cydeo.dto.CategoryDto;
-import com.cydeo.dto.ClientVendorDto;
 import com.cydeo.entity.Category;
-import com.cydeo.entity.ClientVendor;
 import com.cydeo.entity.Company;
-import com.cydeo.entity.User;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.CategoryRepository;
 import com.cydeo.service.CategoryService;
+import com.cydeo.service.ProductService;
 import com.cydeo.service.SecurityService;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -21,28 +18,29 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-    private  final CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-private  final MapperUtil mapperUtil;
+    private final MapperUtil mapperUtil;
 
-private final SecurityService securityService;
+    private final SecurityService securityService;
 
-private final ProductService productService;
+    private final ProductService productService;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, SecurityService securityService) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, SecurityService securityService, ProductService productService) {
         this.categoryRepository = categoryRepository;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
+        this.productService = productService;
     }
 
     @Override
     public CategoryDto findCategoryById(Long id) {
-        Category category=  categoryRepository.findById(id).get();
-        return  mapperUtil.convert(category,new CategoryDto());
+        Category category = categoryRepository.findById(id).get();
+        return mapperUtil.convert(category, new CategoryDto());
     }
 
     @Override
-    public List< CategoryDto> getListOfCategories() {
+    public List<CategoryDto> getListOfCategories() {
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return categoryRepository
                 .findAllByCompany(company)
@@ -86,7 +84,7 @@ private final ProductService productService;
 
     @Override
     public void delete(CategoryDto categoryDto) {
-        Optional<Category> category= categoryRepository.findById(categoryDto.getId());
+        Optional<Category> category = categoryRepository.findById(categoryDto.getId());
         category.get().setIsDeleted(true);
         category.get().setDescription(category.get().getDescription() + " " + category.get().getId());
         categoryRepository.save(category.get());

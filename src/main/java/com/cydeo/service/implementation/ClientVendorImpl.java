@@ -1,11 +1,7 @@
 package com.cydeo.service.implementation;
 
 import com.cydeo.dto.ClientVendorDto;
-import com.cydeo.dto.CompanyDto;
 import com.cydeo.entity.ClientVendor;
-import com.cydeo.entity.Company;
-import com.cydeo.entity.User;
-import com.cydeo.enums.CompanyStatus;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.ClientVendorRepository;
 import com.cydeo.service.ClientVendorService;
@@ -19,8 +15,8 @@ import java.util.stream.Collectors;
 @Service
 public class ClientVendorImpl implements ClientVendorService {
 
-   private final ClientVendorRepository clientVendorRepository;
-    private  final MapperUtil mapperUtil;
+    private final ClientVendorRepository clientVendorRepository;
+    private final MapperUtil mapperUtil;
 
     private final SecurityService securityService;
 
@@ -41,7 +37,7 @@ public class ClientVendorImpl implements ClientVendorService {
     @Override
     public List<ClientVendorDto> listAllClientsAndVendors() {
         List<ClientVendor> clientVendors = clientVendorRepository.findAll();
-        return  clientVendors.stream().map( obj -> mapperUtil.convert(obj , new ClientVendorDto())).collect(Collectors.toList());
+        return clientVendors.stream().map(obj -> mapperUtil.convert(obj, new ClientVendorDto())).collect(Collectors.toList());
 
     }
 
@@ -62,10 +58,10 @@ public class ClientVendorImpl implements ClientVendorService {
     @Override
     public void update(ClientVendorDto clientVendorDto) {
 
-    Optional<ClientVendor> retrievedClientVendor = clientVendorRepository.findById(clientVendorDto.getId());
-    clientVendorDto.getAddress().setId(retrievedClientVendor.get().getAddress().getId());     // otherwise it creates new address instead of updating existing one
-     clientVendorDto.setCompany(securityService.getLoggedInUser().getCompany());
-       ClientVendor convertedClientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
+        Optional<ClientVendor> retrievedClientVendor = clientVendorRepository.findById(clientVendorDto.getId());
+        clientVendorDto.getAddress().setId(retrievedClientVendor.get().getAddress().getId());     // otherwise it creates new address instead of updating existing one
+        clientVendorDto.setCompany(securityService.getLoggedInUser().getCompany());
+        ClientVendor convertedClientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
         clientVendorRepository.save(convertedClientVendor);
 
     }

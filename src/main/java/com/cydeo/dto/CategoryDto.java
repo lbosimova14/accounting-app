@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CategoryDto {
 
-   private Long id;
+    private Long id;
     private String description;
     private CompanyDto company;
     private boolean hasProduct;

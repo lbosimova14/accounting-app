@@ -10,10 +10,10 @@
  * @Transient annotation is used to make a field non-persistent
  * @Enumerated annotation is used to persist Java Enum type. If you dont configure the annotation with EnumType.STRING then it will read value as integer (0, 1)
  * @MappedSuperclass annotation is used to allow an entity to inherit properties from a base class
- *
+ * <p>
  * Cascading --> When we perform some action on the target entity, the same action will be applied to the associated entity.
  * Different JPA Cascade Types: ALL, PERSIST, MERGE, REMOVE, REFRESH, DETACH
- *
+ * <p>
  * Why Entity object need? Bc Some curtain field/object we keep in database, all security related information we keep in database for tracking perpose
  * dont want to show in view.
  * </p>

@@ -14,7 +14,8 @@ import java.util.List;
 public class UserPrincipal implements UserDetails {
 
     private final User user;
-//@Lazy lazy loading, create object when we need it
+
+    //@Lazy lazy loading, create object when we need it
     public UserPrincipal(@Lazy User user) {
         this.user = user;
     }

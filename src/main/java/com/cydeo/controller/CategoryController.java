@@ -18,19 +18,19 @@ public class CategoryController {
     }
 
     @GetMapping("/list")
-    public String getListOfCategories(Model model){
+    public String getListOfCategories(Model model) {
         model.addAttribute("categories", categoryService.getListOfCategories());
         return "/category/category-list";
     }
 
     @GetMapping("/create")
-    public String navigateToCategory(Model model){
+    public String navigateToCategory(Model model) {
         model.addAttribute("newCategory", new CategoryDto());
         return "/category/category-create";
     }
 
     @PostMapping("/create")
-    public String createCategory(@ModelAttribute("newCategory") CategoryDto categoryDto, BindingResult bindingResult){
+    public String createCategory(@ModelAttribute("newCategory") CategoryDto categoryDto, BindingResult bindingResult) {
 
         boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto);
 
@@ -41,13 +41,13 @@ public class CategoryController {
             return "/category/category-create";
         }
 
-         categoryService.create(categoryDto);
+        categoryService.create(categoryDto);
         return "redirect:/categories/list";
     }
 
 
     @GetMapping("/update/{categoryId}")
-    public String selectCategory(@PathVariable("categoryId") Long categoryId, Model model){
+    public String selectCategory(@PathVariable("categoryId") Long categoryId, Model model) {
 
         CategoryDto categoryById = categoryService.findCategoryById(categoryId);
         categoryById.setHasProduct(categoryService.hasProduct(categoryId));
@@ -56,7 +56,7 @@ public class CategoryController {
     }
 
     @PostMapping("/update/{id}")
-    public String update(@ModelAttribute("category") CategoryDto categoryDto, BindingResult bindingResult,  Model model){
+    public String update(@ModelAttribute("category") CategoryDto categoryDto, BindingResult bindingResult, Model model) {
 
         boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto);
         if (categoryDescriptionExist) {
@@ -73,7 +73,7 @@ public class CategoryController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteCategory(@ModelAttribute("category") CategoryDto categoryDto){
+    public String deleteCategory(@ModelAttribute("category") CategoryDto categoryDto) {
 
         categoryService.delete(categoryDto);
         return "redirect:/categories/list";
@@ -82,10 +82,9 @@ public class CategoryController {
 
 
     @ModelAttribute
-    public void commonAttributes(Model model){
+    public void commonAttributes(Model model) {
         model.addAttribute("title", "Cydeo Accounting-Category");
     }
-
 
 
 }

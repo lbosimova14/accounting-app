@@ -1,6 +1,9 @@
 package com.cydeo.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.*;
 
@@ -29,12 +32,12 @@ public class UserDto {
     @Email
     private String username;
 
-//    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
+    //    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
     //    @NotBlank   // @Pattern is enough to check if it is not blank
     @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}")
     private String password;
 
-//    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
+    //    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
     @NotNull
     private String confirmPassword;
 

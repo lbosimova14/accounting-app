@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     public UserDto findUserById(Long userId) {
         User user = userRepository.findUserById(userId);
@@ -74,12 +73,12 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto userDto) {
         //save method is equal to update, there are not update method in crud
         //find current user
-       User currentUser= userRepository.findByUsername(userDto.getUsername());
-     User updatedUser=  mapperUtil.convert(userDto, new User());
-     //capture the existing user ID then set back the same id, if you dont retrieve from database, ui does not have id, then it will create new id, which we dont want
+        User currentUser = userRepository.findByUsername(userDto.getUsername());
+        User updatedUser = mapperUtil.convert(userDto, new User());
+        //capture the existing user ID then set back the same id, if you dont retrieve from database, ui does not have id, then it will create new id, which we dont want
         updatedUser.setId(currentUser.getId());
         updatedUser.setPassword(passwordEncoder.encode(currentUser.getPassword()));
-     userRepository.save(updatedUser);
+        userRepository.save(updatedUser);
 
         return findByUsername(userDto.getUsername());
     }

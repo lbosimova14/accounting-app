@@ -1,7 +1,6 @@
 package com.cydeo.entity;
 
 import com.cydeo.enums.ProductUnit;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

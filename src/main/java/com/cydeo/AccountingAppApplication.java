@@ -22,6 +22,7 @@ public class AccountingAppApplication {
     public static void main(String[] args) {
         SpringApplication.run(AccountingAppApplication.class, args);
     }
+
     //convert the entity/db to dto/view
     @Bean
     public ModelMapper modelMapper() {

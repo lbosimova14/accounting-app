@@ -1,6 +1,5 @@
 package com.cydeo.controller;
 
-import com.cydeo.dto.CompanyDto;
 import com.cydeo.dto.UserDto;
 import com.cydeo.service.CompanyService;
 import com.cydeo.service.RoleService;
@@ -16,9 +15,9 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 public class UserController {
 
-   private final UserService userService;
-   private final RoleService roleService;
-   private final CompanyService companyService;
+    private final UserService userService;
+    private final RoleService roleService;
+    private final CompanyService companyService;
 
     public UserController(UserService userService, RoleService roleService, CompanyService companyService) {
         this.userService = userService;
@@ -27,9 +26,8 @@ public class UserController {
     }
 
 
-
     @GetMapping("/list")
-    public String listUsers(Model model){
+    public String listUsers(Model model) {
 
         model.addAttribute("users", userService.getFilteredUsers());
         return "user/user-list";
@@ -45,10 +43,10 @@ public class UserController {
 
 
     @PostMapping("/create")
-    public String createUser(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult bindingResult,Model model ){
+    public String createUser(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("userRoles",  roleService.getFilteredRolesForCurrentUser());
-            model.addAttribute("companies",companyService.getFilteredCompaniesForCurrentUser());
+            model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
+            model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
             return "/user/user-create";
         }
         userService.save(userDto);
@@ -56,20 +54,20 @@ public class UserController {
     }
 
     @GetMapping("/update/{userId}")
-    public String editUser(@PathVariable("userId") Long userId, Model model){
+    public String editUser(@PathVariable("userId") Long userId, Model model) {
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("userRoles",  roleService.getFilteredRolesForCurrentUser());
-        model.addAttribute("companies",companyService.getFilteredCompaniesForCurrentUser());
+        model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
+        model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
         return "/user/user-update";
     }
 
     @PostMapping("/update/{userId}")
-        public String updateUser(@PathVariable("userId") Long userId,@Valid @ModelAttribute("user") UserDto userDto, BindingResult bindingResult, Model model){
+    public String updateUser(@PathVariable("userId") Long userId, @Valid @ModelAttribute("user") UserDto userDto, BindingResult bindingResult, Model model) {
 
         userDto.setId(userId);  // spring cannot set id since it is not seen in UI and we need to check if updated email is used by different user.
         boolean emailExist = userService.emailExist(userDto);
 
-        if (bindingResult.hasErrors() || emailExist){
+        if (bindingResult.hasErrors() || emailExist) {
             if (emailExist) {
                 bindingResult.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
             }
@@ -85,12 +83,10 @@ public class UserController {
 
 
     @GetMapping("/delete/{userId}")
-    public String deleteUser(@PathVariable("userId") Long userID){
+    public String deleteUser(@PathVariable("userId") Long userID) {
         userService.delete(userID);
         return "redirect:/users/list";
     }
-
-
 
 
 }

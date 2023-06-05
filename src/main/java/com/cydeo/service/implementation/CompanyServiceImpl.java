@@ -4,7 +4,6 @@ import com.cydeo.dto.CompanyDto;
 import com.cydeo.entity.Company;
 import com.cydeo.enums.CompanyStatus;
 import com.cydeo.mapper.MapperUtil;
-import com.cydeo.repository.AddressRepository;
 import com.cydeo.repository.CompanyRepository;
 import com.cydeo.service.CompanyService;
 import com.cydeo.service.SecurityService;
@@ -57,9 +56,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public void update(CompanyDto companyDto) {
-        Optional<Company> companyEntity =  companyRepository.findById(companyDto.getId());
+        Optional<Company> companyEntity = companyRepository.findById(companyDto.getId());
         Company convertedCompany = mapperUtil.convert(companyDto, new Company());
-        if (companyEntity.isPresent() ){
+        if (companyEntity.isPresent()) {
             convertedCompany.setId(companyEntity.get().getId());
             convertedCompany.setCompanyStatus(companyDto.getCompanyStatus() == null ? companyEntity.get().getCompanyStatus() : companyDto.getCompanyStatus());
             convertedCompany.getAddress().setId(companyEntity.get().getAddress().getId());
@@ -74,9 +73,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public void activate(Long companyId) {
-       Company company = companyRepository.findCompanyById(companyId);
+        Company company = companyRepository.findCompanyById(companyId);
         company.setCompanyStatus(CompanyStatus.ACTIVE);
-         companyRepository.save(company);
+        companyRepository.save(company);
     }
 
     @Override

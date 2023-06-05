@@ -1,8 +1,6 @@
 package com.cydeo.service.implementation;
 
-import com.cydeo.dto.CategoryDto;
 import com.cydeo.dto.ProductDto;
-import com.cydeo.entity.Category;
 import com.cydeo.entity.Company;
 import com.cydeo.entity.Product;
 import com.cydeo.mapper.MapperUtil;
@@ -76,22 +74,22 @@ public class ProductServiceImpl implements ProductService {
     public void updateProduct(ProductDto productDto) {
 
         Product product = productRepository.findById(productDto.getId())
-                .orElseThrow(()-> new NoSuchElementException("Product " + productDto.getName() + "not found"));
+                .orElseThrow(() -> new NoSuchElementException("Product " + productDto.getName() + "not found"));
         final int quantityInStock = productDto.getQuantityInStock() == null ? product.getQuantityInStock() : productDto.getQuantityInStock();
         productDto.setQuantityInStock(quantityInStock);
-        productRepository.save(mapperUtil.convert(productDto,new Product()));
+        productRepository.save(mapperUtil.convert(productDto, new Product()));
     }
 
     @Override
     public void delete(Long productId) {
-      Product productEntity =  productRepository.findById(productId).get();
-      if(productEntity.getQuantityInStock()==0){
-          productEntity.setIsDeleted(true);
-      }else {
-          log.error("you cannot delete product that has quantity in stock");
-          throw new RuntimeException();
-      }
-      productRepository.save(productEntity);
+        Product productEntity = productRepository.findById(productId).get();
+        if (productEntity.getQuantityInStock() == 0) {
+            productEntity.setIsDeleted(true);
+        } else {
+            log.error("you cannot delete product that has quantity in stock");
+            throw new RuntimeException();
+        }
+        productRepository.save(productEntity);
     }
 
 

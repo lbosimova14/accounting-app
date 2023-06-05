@@ -27,14 +27,14 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public String listAllProducts(Model model){
+    public String listAllProducts(Model model) {
 
-     model.addAttribute("products", productService.getAllProducts());
-     return "/product/product-list";
+        model.addAttribute("products", productService.getAllProducts());
+        return "/product/product-list";
     }
 
     @GetMapping("/create")
-    public String navigateToProductCreatePage(Model model){
+    public String navigateToProductCreatePage(Model model) {
         model.addAttribute("newProduct", new ProductDto());
         model.addAttribute("categories", categoryService.getListOfCategories());
         model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
@@ -42,9 +42,9 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public String createProduct(@Valid @ModelAttribute("newProduct") ProductDto productDto , BindingResult bindingResult, Model model){
+    public String createProduct(@Valid @ModelAttribute("newProduct") ProductDto productDto, BindingResult bindingResult, Model model) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getListOfCategories());
             model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
             return "/product/product-create";
@@ -55,58 +55,37 @@ public class ProductController {
     }
 
     @GetMapping("/update/{productId}")
-    public String updateProduct(@PathVariable("productId") Long productId, Model model){
+    public String updateProduct(@PathVariable("productId") Long productId, Model model) {
 
-        model.addAttribute("product" , productService.findProductById(productId));
+        model.addAttribute("product", productService.findProductById(productId));
         model.addAttribute("categories", categoryService.getListOfCategories());
         model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
 
 
         return "/product/product-update";
     }
-//no need validation for update page, field is repopulated
-    @PostMapping("/update/{id}")
-    public String saveProduct( @ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, Model model){
 
-        if(bindingResult.hasErrors()) {
+    //no need validation for update page, field is repopulated
+    @PostMapping("/update/{id}")
+    public String saveProduct(@ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getListOfCategories());
             model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
             return "/product/product-update";
         }
-             productService.updateProduct(productDto);
+        productService.updateProduct(productDto);
 
         return "redirect:/products/list";
     }
 
 
     @GetMapping("/delete/{productId}")
-    public String deleteProduct(@PathVariable("productId") Long productId, Model model){
+    public String deleteProduct(@PathVariable("productId") Long productId, Model model) {
 
         productService.delete(productId);
         return "redirect:/products/list";
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @ModelAttribute

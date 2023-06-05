@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDto> getListOfCategories() {
 
-       //   User Story-> The company of the category should be the company of the current user
+        //   User Story-> The company of the category should be the company of the current user
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return categoryRepository
                 .findAllByCompany(company)

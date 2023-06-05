@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 
 @Controller
@@ -41,7 +42,7 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public String createProduct(@ModelAttribute("newProduct") ProductDto productDto , BindingResult bindingResult, Model model){
+    public String createProduct(@Valid @ModelAttribute("newProduct") ProductDto productDto , BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()){
             model.addAttribute("categories", categoryService.getListOfCategories());
@@ -63,9 +64,9 @@ public class ProductController {
 
         return "/product/product-update";
     }
-
+//no need validation for update page, field is repopulated
     @PostMapping("/update/{id}")
-    public String saveProduct(@ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, Model model){
+    public String saveProduct( @ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getListOfCategories());

@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<ProductDto> findByCategoryId(Long categoryId);
+    //method returns to Entity, not Dto
+    List<Product> findByCategoryId(Long categoryId);
 }

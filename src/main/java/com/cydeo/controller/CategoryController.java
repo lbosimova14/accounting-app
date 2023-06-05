@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping("/categories")
 public class CategoryController {
@@ -30,7 +32,7 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public String createCategory(@ModelAttribute("newCategory") CategoryDto categoryDto, BindingResult bindingResult) {
+    public String createCategory(@Valid @ModelAttribute("newCategory") CategoryDto categoryDto, BindingResult bindingResult) {
 
         boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto);
 
@@ -56,7 +58,7 @@ public class CategoryController {
     }
 
     @PostMapping("/update/{id}")
-    public String update(@ModelAttribute("category") CategoryDto categoryDto, BindingResult bindingResult, Model model) {
+    public String update(@Valid @ModelAttribute("category") CategoryDto categoryDto, BindingResult bindingResult) {
 
         boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto);
         if (categoryDescriptionExist) {

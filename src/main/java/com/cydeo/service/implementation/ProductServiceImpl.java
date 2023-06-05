@@ -5,11 +5,14 @@ import com.cydeo.entity.Product;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.ProductRepository;
 import com.cydeo.service.ProductService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
+@Service
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;

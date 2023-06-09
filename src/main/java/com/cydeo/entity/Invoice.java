@@ -4,15 +4,18 @@ import com.cydeo.enums.InvoiceStatus;
 import com.cydeo.enums.InvoiceType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @Data
 @Table(name = "invoices")
-class Invoice extends BaseEntity {
+@Where(clause = "is_deleted=false")
+public class Invoice extends BaseEntity {
 
     private String invoiceNo;
     @Enumerated(EnumType.STRING)
@@ -26,4 +29,7 @@ class Invoice extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @OneToMany(mappedBy = "invoice")
+    private List<InvoiceProduct> invoiceProducts;
 }

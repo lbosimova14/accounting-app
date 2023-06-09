@@ -69,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
         productDto.setQuantityInStock(0);
         productRepository.save(mapperUtil.convert(productDto, new Product()));
     }
-
+//id is coming from private Long Id.
     @Override
     public void updateProduct(ProductDto productDto) {
 
@@ -78,6 +78,19 @@ public class ProductServiceImpl implements ProductService {
         final int quantityInStock = productDto.getQuantityInStock() == null ? product.getQuantityInStock() : productDto.getQuantityInStock();
         productDto.setQuantityInStock(quantityInStock);
         productRepository.save(mapperUtil.convert(productDto, new Product()));
+    }
+
+
+    // second way to create update method if controller argument has  @PathVariable
+    @Override
+    public ProductDto update(Long productId, ProductDto productDto) {
+        productDto.setId(productId);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()-> new NoSuchElementException("Product " + productDto.getName() + "not found"));
+        final int quantityInStock = productDto.getQuantityInStock() == null ? product.getQuantityInStock() : productDto.getQuantityInStock();
+        productDto.setQuantityInStock(quantityInStock);
+        product = productRepository.save(mapperUtil.convert(productDto, new Product()));
+        return mapperUtil.convert(product, productDto);
     }
 
     @Override

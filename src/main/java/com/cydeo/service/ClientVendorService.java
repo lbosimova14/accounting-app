@@ -1,6 +1,7 @@
 package com.cydeo.service;
 
 import com.cydeo.dto.ClientVendorDto;
+import com.cydeo.enums.ClientVendorType;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface ClientVendorService {
     void update(ClientVendorDto Id);
 
     void delete(Long clientVendorID);
+
+    List<ClientVendorDto> getAllClientVendorsOfCompany(ClientVendorType clientVendorType);
 }

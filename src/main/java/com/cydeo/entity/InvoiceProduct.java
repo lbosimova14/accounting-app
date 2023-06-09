@@ -3,6 +3,7 @@ package com.cydeo.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
+@Where(clause = "is_deleted=false")
 public class InvoiceProduct extends BaseEntity {
 
     private int quantity;
@@ -23,7 +25,7 @@ public class InvoiceProduct extends BaseEntity {
     private BigDecimal profitLoss;
 
     @Column(name = "remaining_quantity")
-    private int remainingQty;
+    private int remainingQuantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_id")

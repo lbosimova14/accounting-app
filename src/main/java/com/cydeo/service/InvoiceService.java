@@ -1,6 +1,7 @@
 package com.cydeo.service;
 
 import com.cydeo.dto.InvoiceDto;
+import com.cydeo.enums.InvoiceStatus;
 import com.cydeo.enums.InvoiceType;
 
 import java.math.BigDecimal;
@@ -25,4 +26,10 @@ public interface InvoiceService {
     InvoiceDto getNewInvoice(InvoiceType invoiceType) throws Exception;
 
     InvoiceDto save(InvoiceDto invoiceDto, InvoiceType invoiceType);
+
+    List<InvoiceDto> getAllInvoicesByInvoiceStatus(InvoiceStatus invoiceStatus);
+
+    BigDecimal getProfitLossOfInvoice(Long id);
+
+    List<InvoiceDto> getLastThreeInvoices();
 }

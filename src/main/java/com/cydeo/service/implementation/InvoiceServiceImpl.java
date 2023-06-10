@@ -140,12 +140,42 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public InvoiceDto save(InvoiceDto invoiceDto, InvoiceType invoiceType){
+    public InvoiceDto save(InvoiceDto invoiceDto, InvoiceType invoiceType) {
         invoiceDto.setCompany(securityService.getLoggedInUser().getCompany());
         invoiceDto.setInvoiceType(invoiceType);
         invoiceDto.setInvoiceStatus(InvoiceStatus.AWAITING_APPROVAL);
         Invoice invoice = mapperUtil.convert(invoiceDto, new Invoice());
         return mapperUtil.convert(invoiceRepository.save(invoice), new InvoiceDto());
+    }
+
+    @Override
+    public List<InvoiceDto> getAllInvoicesByInvoiceStatus(InvoiceStatus status) {
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceStatus(company, InvoiceStatus.APPROVED);
+        return invoices
+                .stream()
+                .map(invoice -> mapperUtil.convert(invoice, new InvoiceDto()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public BigDecimal getProfitLossOfInvoice(Long id) {
+        Invoice invoice = invoiceRepository.findInvoiceById(id);
+        List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
+        return invoiceProductsOfInvoice.stream()
+                .map(InvoiceProductDto::getProfitLoss)
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+    }
+
+    @Override
+    public List<InvoiceDto> getLastThreeInvoices() {
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        return invoiceRepository.findInvoicesByCompanyAndInvoiceStatusOrderByDateDesc(company, InvoiceStatus.APPROVED)
+                .stream()
+                .limit(3)
+                .map(each -> mapperUtil.convert(each, new InvoiceDto()))
+                .peek(this::calculateInvoiceDetails)
+                .collect(Collectors.toList());
     }
 
 

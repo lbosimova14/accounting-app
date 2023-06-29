@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
+//ignoreUnknown = true is related to security, if somebody try to put new field in this class, ignore it, dont put. anything outside the field not allowed
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CurrencyApiResponse {
 

@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * If class is not your class, and create bean in this class, bc @SpringBootApplication has @Configuration, it is treating as configuration class
  */
 @SpringBootApplication
+//this like a bean structure
 @EnableFeignClients
 @EnableCaching
 public class AccountingAppApplication {

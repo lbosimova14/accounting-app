@@ -5,7 +5,11 @@ import com.cydeo.service.CompanyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
@@ -27,13 +31,13 @@ public class CompanyController {
 
     @GetMapping("/create")
     public String createCompany(Model model) {
-        model.addAttribute("newCompany", new CompanyDto());
 
+        model.addAttribute("newCompany", new CompanyDto());
         return "company/company-create";
     }
 
     @PostMapping("/create")
-    public String insertCompany(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult, Model model) {
+    public String insertCompany(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult) {
 
 //if any broken data coming , then somehow stop the post method
         if (bindingResult.hasErrors()) {

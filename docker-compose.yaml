@@ -1,0 +1,44 @@
+version: "3.7"
+#peace of application
+services:
+  #  mypostgres is ready image
+  mypostgres:
+    image: postgres
+    #    defined container name
+    container_name: mypostgres
+    ports:
+      - "5435:5432"
+    #      if you cannot reach to this server restart until you reach
+    restart: always
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "laylo123"
+      POSTGRES_DB: "accounting-app"
+    networks:
+      - webnet
+    volumes:
+      #      - target place - storing the data into here, container name > /var/lib/postgres/data
+      - initdb:/var/lib/postgres/data
+  #      accounting-app is service name
+  accounting-app:
+    #    dot is current location, current project, means find Dockerfile. we are building new service named 'accounting-app' ownself using build commend here, no need build command for postgres service, bc postgres is ready service
+    build: .
+    container_name: accountingapp
+    ports:
+      - "8081:8081"
+    #      start after mypostgres sql server start
+    depends_on:
+      - mypostgres
+    networks:
+      - webnet
+#      - store the persistent data to volumes, hold data under the volume
+volumes:
+  initdb:
+networks:
+  webnet:
+    driver: bridge
+
+#    command run via terminal:  docker compose up
+#it will run each stage in order, service, postgresql, my own image tickting-app, volume
+
+

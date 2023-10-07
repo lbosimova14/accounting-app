@@ -6,7 +6,7 @@
 --                           primary key(id)
 -- );
 -- place this in data.sql file
-    -- INSERT INTO EMPLOYEES(id, name)
+-- INSERT INTO EMPLOYEES(id, name)
 -- VALUES(1,'Mike Smith');
 
 -- If you using hibernate (Entity class), then schema.slq file does not need, we will create table  hibernate way.
